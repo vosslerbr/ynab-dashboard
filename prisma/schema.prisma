@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model user {
   id            String    @id
   name          String?
   email         String
@@ -15,18 +15,18 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  budgets       Budget[]  @relation("User")
+  sessions      session[]
+  accounts      account[]
+  budgets       budget[]  @relation("User")
 
   /// a hacky way to ensure a user can only ever "select" one budget at a time
   selectedBudgetId String? @unique
-  selectedBudget   Budget? @relation("SelectedBudget", fields: [selectedBudgetId], references: [id], onDelete: SetNull)
+  selectedBudget   budget? @relation("SelectedBudget", fields: [selectedBudgetId], references: [id], onDelete: SetNull)
 
   @@unique([email])
 }
 
-model Session {
+model session {
   id        String   @id
   expiresAt DateTime
   token     String
@@ -35,17 +35,17 @@ model Session {
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
 }
 
-model Account {
+model account {
   id                    String    @id
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  user      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -59,19 +59,17 @@ model Account {
 
 }
 
-model Verification {
+model verification {
   id         String   @id
   identifier String
   value      String
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
-
-
 }
 
 /// Basically a YNAB budget, with the data we need
-model Budget {
+model budget {
   id              String @id @default(cuid(2))
   name            String
   dateFormat      String @default("MM/DD/YYYY")
@@ -79,17 +77,17 @@ model Budget {
   serverKnowledge BigInt /// Allows us to know when the data for budget was last updated
 
   userId String
-  user   User   @relation("User", fields: [userId], references: [id], onDelete: Cascade)
+  user   user   @relation("User", fields: [userId], references: [id], onDelete: Cascade)
 
-  selectedBy User?      @relation("SelectedBudget")
-  categories Category[]
+  selectedBy user?      @relation("SelectedBudget")
+  categories category[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
 
 /// Represents a category "selected" to show in the app. Unselected categories will just be deleted
-model Category {
+model category {
   id        String  @id @default(cuid(2))
   name      String
   groupName String?
@@ -100,7 +98,7 @@ model Category {
   // TODO: likely an enum here for selecting if the category is for charts, graphs, etc
 
   budgetId String
-  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  budget   budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

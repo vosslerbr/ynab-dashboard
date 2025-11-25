@@ -1,3 +1,6 @@
+# better-auth
+
+## Access Token
 Here is how to get an access token for API
 ```
 const accessToken = await auth.api.getAccessToken({
@@ -5,3 +8,4 @@ const accessToken = await auth.api.getAccessToken({
   headers: ctx.headers,
 });
 ```
+## Middleware
