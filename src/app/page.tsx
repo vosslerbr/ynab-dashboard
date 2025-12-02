@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/server/better-auth";
 import { getSession } from "@/server/better-auth/server";
 import { api, HydrateClient } from "@/trpc/server";
+import HelloWorldButton from "@/components/client/HelloWorldButton";
 
 export default async function Home() {
   const hello = await api.budget.hello({ text: "from tRPC" });
@@ -61,6 +62,7 @@ export default async function Home() {
         </div>
 
         {session?.user && <p>{hello.greeting}</p>}
+        <HelloWorldButton />
       </main>
     </HydrateClient>
   );
