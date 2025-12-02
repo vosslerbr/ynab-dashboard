@@ -8,10 +8,8 @@ export default function HelloWorldButton() {
   };
 
   return (
-    <>
-      <Button type="button" onClick={buttonClick}>
-        Hello World
-      </Button>
-    </>
+    <Button type="button" onClick={buttonClick}>
+      Hello World
+    </Button>
   );
 }
