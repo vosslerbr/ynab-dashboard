@@ -172,7 +172,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/brady/code/personal/ynab-dashboard/generated/prisma",
+      "value": "C:\\Users\\rbenn\\Documents\\GitHub\\ynab-dashboard\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -181,17 +181,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/brady/code/personal/ynab-dashboard/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\rbenn\\Documents\\GitHub\\ynab-dashboard\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.19.0",
@@ -200,6 +199,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
