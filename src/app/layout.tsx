@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import Footer from "./_components/footer";
 import NavBar from "./_components/nav-bar";
 
 export const metadata: Metadata = {
@@ -25,7 +26,12 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <NavBar />
-          <main className="m-auto max-w-7xl py-8">{children}</main>
+          <div className="flex flex-col">
+            <main className="m-auto w-full max-w-7xl px-4 py-8">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </TRPCReactProvider>
       </body>
     </html>
