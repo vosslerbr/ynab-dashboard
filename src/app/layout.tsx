@@ -1,9 +1,10 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import NavBar from "./_components/nav-bar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -11,18 +12,21 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const geist = Geist({
+const font = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-jakarta-sans",
 });
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+    <html lang="en" className={`${font.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <NavBar />
+          <main className="m-auto max-w-7xl py-8">{children}</main>
+        </TRPCReactProvider>
       </body>
     </html>
   );
