@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 import { auth } from "@/server/better-auth";
 import { db } from "@/server/db";
+import { getYnabClient } from "../ynab/client";
 
 /**
  * 1. CONTEXT
@@ -121,12 +122,21 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  */
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
-  .use(({ ctx, next }) => {
+  .use(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
+
+    const { accessToken } = await auth.api.getAccessToken({
+      body: { providerId: "ynab" },
+      headers: ctx.headers,
+    });
+
+    const client = getYnabClient(accessToken);
+
     return next({
       ctx: {
+        ynabClient: client,
         // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
       },

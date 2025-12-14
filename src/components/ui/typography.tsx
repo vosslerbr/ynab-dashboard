@@ -31,19 +31,3 @@ export function H4({ children }: { children: ReactNode }) {
     </h4>
   );
 }
-
-export function H5({ children }: { children: ReactNode }) {
-  return (
-    <h5 className="scroll-m-20 text-base font-semibold tracking-tight">
-      {children}
-    </h5>
-  );
-}
-
-export function H6({ children }: { children: ReactNode }) {
-  return (
-    <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
-      {children}
-    </h6>
-  );
-}

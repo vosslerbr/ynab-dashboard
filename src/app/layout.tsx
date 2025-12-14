@@ -3,8 +3,8 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
-import Footer from "@/components/common/footer";
-import NavBar from "@/components/common/nav-bar";
+import Footer from "@/app/_components/footer";
+import NavBar from "@/app/_components/nav-bar";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {

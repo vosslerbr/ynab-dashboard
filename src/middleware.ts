@@ -16,9 +16,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   runtime: "nodejs", // Required for auth.api calls
-  matcher: [
-    // This will run the middleware on all routes
-    // EXCEPT /sign-in, /_next, /api, /static, and /favicon.ico
-    "/((?!sign-in|_next|api|static|favicon.ico).*)",
-  ],
+  matcher: ["/dashboard/:path*"], // TODO make sure this works
 };
