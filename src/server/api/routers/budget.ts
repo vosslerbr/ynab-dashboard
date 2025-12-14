@@ -1,13 +1,13 @@
-import { z } from "zod";
-
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 export const budgetRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(async () => {
-      return {
-        greeting: `Hello world`,
-      };
-    }),
+  getUserBudgets: protectedProcedure.query(async ({ ctx }) => {
+    const budgets = await ctx.db.budget.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+
+    return budgets;
+  }),
 });

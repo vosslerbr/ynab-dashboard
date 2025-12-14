@@ -3,9 +3,9 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
+import Footer from "@/components/common/footer";
+import NavBar from "@/components/common/nav-bar";
 import { TRPCReactProvider } from "@/trpc/react";
-import Footer from "./_components/footer";
-import NavBar from "./_components/nav-bar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
