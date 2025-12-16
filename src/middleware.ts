@@ -1,15 +1,12 @@
-import { auth } from "@/server/better-auth";
-import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
+import { getSession } from "./server/better-auth/server";
 
-export async function proxy(request: NextRequest) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export async function middleware(request: NextRequest) {
+  const session = await getSession();
 
   // THIS IS NOT SECURE!
   // This is the recommended approach to optimistically redirect users
-  // YOU STILL NEED TO HANDLE AUTH IN EACH PAGE/ROUTE
+  // We will still be handling auth checks in each page/route
   if (!session) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
@@ -19,5 +16,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   runtime: "nodejs", // Required for auth.api calls
-  matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: ["/dashboard/:path*"], // TODO make sure this works
 };
