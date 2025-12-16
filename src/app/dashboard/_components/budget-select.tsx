@@ -11,6 +11,18 @@ import { Spinner } from "@/components/ui/spinner";
 import { H4 } from "@/components/ui/typography";
 import { api } from "@/trpc/react";
 import LinkBudgetButton from "./link-budget-btn";
+import Link from "next/link";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemHeader,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import { ChevronRight } from "lucide-react";
 
 export default function BudgetSelect() {
   const { data, error, isLoading } = api.budget.getUserBudgets.useQuery();
@@ -25,21 +37,22 @@ export default function BudgetSelect() {
 
   if (data.length > 0) {
     return (
-      <>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a budget" />
-          </SelectTrigger>
-          <SelectContent>
-            {data.map((budget) => (
-              <SelectItem value={budget.id} key={budget.id}>
-                {budget.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col gap-8">
         <LinkBudgetButton />
-      </>
+
+        {data.map((budget) => (
+          <Item asChild key={budget.id} variant="outline">
+            <Link href={`/dashboard/${budget.id}`}>
+              <ItemContent>
+                <ItemTitle>{budget.name}</ItemTitle>
+              </ItemContent>
+              <ItemActions>
+                <ChevronRight className="size-4" />
+              </ItemActions>
+            </Link>
+          </Item>
+        ))}
+      </div>
     );
   }
 
