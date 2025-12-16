@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import type { BudgetSummary } from "ynab";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   selectedBudgetIds: z.array(z.string()),
@@ -37,12 +38,13 @@ export default function BudgetLinkForm({
     },
   });
 
-  // TODO proper state handling
   const mutation = api.budget.linkBudgets.useMutation({
     onSuccess: () => {
+      toast.success("Budgets linked!");
       router.back();
     },
     onError: (e) => {
+      toast.error("Failed to link budgets");
       console.error(e);
     },
   });
@@ -82,9 +84,6 @@ export default function BudgetLinkForm({
                     <div className="space-y-1 leading-none">
                       <FormLabel className="cursor-pointer font-normal">
                         {ynabBudget.name}
-                        <span className="text-muted-foreground ml-2 text-sm">
-                          ({ynabBudget.id})
-                        </span>
                       </FormLabel>
                     </div>
                   </FormItem>
@@ -95,7 +94,7 @@ export default function BudgetLinkForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Save Links</Button>
+        <Button type="submit">Save</Button>
       </form>
     </Form>
   );

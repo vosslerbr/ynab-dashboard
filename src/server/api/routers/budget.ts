@@ -20,6 +20,8 @@ export const budgetRouter = createTRPCRouter({
   linkBudgets: protectedProcedure
     .input(z.array(z.string()))
     .mutation(async ({ ctx, input: selectedYnabBudgetIds }) => {
+      // TODO this should all probably be in a tranasction...
+
       await ctx.db.budget.deleteMany({
         where: {
           userId: ctx.session.user.id,

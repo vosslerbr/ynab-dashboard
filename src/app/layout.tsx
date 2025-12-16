@@ -6,6 +6,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import Footer from "@/app/_components/footer";
 import NavBar from "@/app/_components/nav-bar";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -32,6 +33,9 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+
+          {/* TODO style the toasts better to match colors */}
+          <Toaster richColors position="top-center" />
         </TRPCReactProvider>
       </body>
     </html>
