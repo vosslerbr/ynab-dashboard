@@ -17,6 +17,17 @@ import type { BudgetSummary } from "ynab";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
   selectedBudgetIds: z.array(z.string()),
@@ -30,6 +41,7 @@ export default function BudgetLinkForm({
   existingYnabBudgetIds: string[];
 }) {
   const router = useRouter();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,53 +61,78 @@ export default function BudgetLinkForm({
     },
   });
 
-  function onSubmit({ selectedBudgetIds }: z.infer<typeof formSchema>) {
-    mutation.mutate(selectedBudgetIds);
+  function onSubmit() {
+    setShowConfirmation(true);
+  }
+
+  function handleConfirmAction() {
+    mutation.mutate(form.getValues("selectedBudgetIds"));
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="selectedBudgetIds"
-          render={({ field }) => (
-            <FormItem>
-              <div className="space-y-3 rounded-lg border p-4">
-                {ynabBudgets.map((ynabBudget) => (
-                  <FormItem
-                    key={ynabBudget.id}
-                    className="flex flex-row items-start space-y-0 space-x-3"
-                  >
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value?.includes(ynabBudget.id)}
-                        onCheckedChange={(checked) => {
-                          return checked
-                            ? field.onChange([...field.value, ynabBudget.id])
-                            : field.onChange(
-                                field.value?.filter(
-                                  (value) => value !== ynabBudget.id,
-                                ),
-                              );
-                        }}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="cursor-pointer font-normal">
-                        {ynabBudget.name}
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                ))}
-              </div>
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="selectedBudgetIds"
+            render={({ field }) => (
+              <FormItem>
+                <div className="space-y-3 rounded-lg border p-4">
+                  {ynabBudgets.map((ynabBudget) => (
+                    <FormItem
+                      key={ynabBudget.id}
+                      className="flex flex-row items-start space-y-0 space-x-3"
+                    >
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value?.includes(ynabBudget.id)}
+                          onCheckedChange={(checked) => {
+                            return checked
+                              ? field.onChange([...field.value, ynabBudget.id])
+                              : field.onChange(
+                                  field.value?.filter(
+                                    (value) => value !== ynabBudget.id,
+                                  ),
+                                );
+                          }}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="cursor-pointer font-normal">
+                          {ynabBudget.name}
+                        </FormLabel>
+                      </div>
+                    </FormItem>
+                  ))}
+                </div>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Save</Button>
-      </form>
-    </Form>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Save</Button>
+        </form>
+      </Form>
+      <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Any budgets you deselected will be unlinked, and their categories
+              removed from this application.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowConfirmation(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAction}>
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
