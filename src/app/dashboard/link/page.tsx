@@ -1,24 +1,20 @@
 import { H1 } from "@/components/ui/typography";
 import { api } from "@/trpc/server";
+import BudgetLinkForm from "./_components/form";
 
 export default async function Page() {
-  const budgets = await api.budget.getUserYnabBudgets();
+  const ynabBudgets = await api.budget.getUserYnabBudgets();
+  const dbBudgets = await api.budget.getUserBudgets();
 
-  // TODO this should be a form
-  // with checkboxes for each budget option
-  // on submit, send array of budget ids to new tRPC proc
-  // proc should fetch budgets from YNAB and
-  // ADD any in array but not in DB,
-  // UPDATE any in array and in DB,
-  // DELETE any in DB that are not in the array
-  // then, redirect user to /dashboard
+  const existingBudgetYnabIds = dbBudgets.map((b) => b.ynabId);
 
   return (
     <>
       <H1>Link Your YNAB Budgets</H1>
-      {budgets.map((budget) => (
-        <p key={budget.id}>{budget.name}</p>
-      ))}
+      <BudgetLinkForm
+        ynabBudgets={ynabBudgets}
+        existingYnabBudgetIds={existingBudgetYnabIds}
+      />
     </>
   );
 }

@@ -22,7 +22,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${font.variable}`}>
+    <html lang="en" className={`${font.variable} dark`}>
       <body>
         <TRPCReactProvider>
           <NavBar />

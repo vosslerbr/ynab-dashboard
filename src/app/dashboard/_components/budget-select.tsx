@@ -25,18 +25,21 @@ export default function BudgetSelect() {
 
   if (data.length > 0) {
     return (
-      <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select a budget" />
-        </SelectTrigger>
-        <SelectContent>
-          {data.map((budget) => (
-            <SelectItem value={budget.id} key={budget.id}>
-              {budget.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <>
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a budget" />
+          </SelectTrigger>
+          <SelectContent>
+            {data.map((budget) => (
+              <SelectItem value={budget.id} key={budget.id}>
+                {budget.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <LinkBudgetButton />
+      </>
     );
   }
 

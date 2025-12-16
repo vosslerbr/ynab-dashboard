@@ -19,10 +19,6 @@ model user {
   accounts      account[]
   budgets       budget[]  @relation("User")
 
-  /// a hacky way to ensure a user can only ever "select" one budget at a time
-  selectedBudgetId String? @unique
-  selectedBudget   budget? @relation("SelectedBudget", fields: [selectedBudgetId], references: [id], onDelete: SetNull)
-
   @@unique([email])
 }
 
@@ -55,8 +51,6 @@ model account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-
-
 }
 
 model verification {
@@ -71,6 +65,7 @@ model verification {
 /// Basically a YNAB budget, with the data we need
 model budget {
   id              String @id @default(cuid(2))
+  ynabId          String @unique
   name            String
   dateFormat      String @default("MM/DD/YYYY")
   currency        String @default("USD")
@@ -79,7 +74,6 @@ model budget {
   userId String
   user   user   @relation("User", fields: [userId], references: [id], onDelete: Cascade)
 
-  selectedBy user?      @relation("SelectedBudget")
   categories category[]
 
   createdAt DateTime @default(now())
