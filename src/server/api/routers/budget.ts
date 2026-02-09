@@ -77,4 +77,141 @@ export const budgetRouter = createTRPCRouter({
         });
       }
     }),
+  getYnabCategories: protectedProcedure
+    .input(z.object({ budgetId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const budget = await ctx.db.budget.findFirst({
+        where: {
+          id: input.budgetId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!budget) {
+        throw new Error("Budget not found");
+      }
+
+      const { data } = await ctx.ynabClient.categories.getCategories(
+        budget.ynabId,
+      );
+
+      // Filter out hidden categories and categories in hidden groups
+      const visibleCategoryGroups =
+        data.category_groups?.filter(
+          (group) => !group.hidden && !group.deleted,
+        ) ?? [];
+
+      const visibleCategories = visibleCategoryGroups.flatMap(
+        (group) =>
+          group.categories
+            ?.filter((cat) => !cat.hidden && !cat.deleted)
+            .map((cat) => ({
+              ...cat,
+              groupName: group.name,
+            })) ?? [],
+      );
+
+      return visibleCategories;
+    }),
+  getTrackedCategories: protectedProcedure
+    .input(z.object({ budgetId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const budget = await ctx.db.budget.findFirst({
+        where: {
+          id: input.budgetId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!budget) {
+        throw new Error("Budget not found");
+      }
+
+      const categories = await ctx.db.category.findMany({
+        where: {
+          budgetId: input.budgetId,
+        },
+      });
+
+      return categories;
+    }),
+  linkCategories: protectedProcedure
+    .input(
+      z.object({
+        budgetId: z.string(),
+        categoryIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const budget = await ctx.db.budget.findFirst({
+        where: {
+          id: input.budgetId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!budget) {
+        throw new Error("Budget not found");
+      }
+
+      // Delete categories that are no longer selected
+      await ctx.db.category.deleteMany({
+        where: {
+          budgetId: input.budgetId,
+          ynabId: { notIn: input.categoryIds },
+        },
+      });
+
+      // Fetch current category data from YNAB
+      const { data } = await ctx.ynabClient.categories.getCategories(
+        budget.ynabId,
+      );
+      const ynabCategories =
+        data.category_groups?.flatMap(
+          (group) =>
+            group.categories?.map((cat) => ({
+              ...cat,
+              groupName: group.name,
+            })) ?? [],
+        ) ?? [];
+
+      const ynabCategoriesById = ynabCategories.reduce(
+        (acc, cat) => {
+          acc[cat.id] = cat;
+          return acc;
+        },
+        {} as Record<string, (typeof ynabCategories)[number]>,
+      );
+
+      // Upsert selected categories
+      for (const categoryId of input.categoryIds) {
+        const ynabCategory = ynabCategoriesById[categoryId];
+        if (!ynabCategory) continue;
+
+        await ctx.db.category.upsert({
+          where: {
+            budgetId_ynabId: {
+              budgetId: input.budgetId,
+              ynabId: categoryId,
+            },
+          },
+          create: {
+            ynabId: categoryId,
+            name: ynabCategory.name,
+            groupName: ynabCategory.groupName,
+            budgeted: ynabCategory.budgeted ?? 0,
+            activity: ynabCategory.activity ?? 0,
+            balance: ynabCategory.balance ?? 0,
+            budgetId: input.budgetId,
+          },
+          update: {
+            name: ynabCategory.name,
+            groupName: ynabCategory.groupName,
+            budgeted: ynabCategory.budgeted ?? 0,
+            activity: ynabCategory.activity ?? 0,
+            balance: ynabCategory.balance ?? 0,
+          },
+        });
+      }
+    }),
 });
