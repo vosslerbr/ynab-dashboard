@@ -10,7 +10,7 @@ export default function SettingsPage() {
       <div className="space-y-4">
         <H2>Budgets</H2>
         <Button asChild>
-          <Link href="/dashboard/settings/link">Link Budget</Link>
+          <Link href="/dashboard/settings/link">Update Linked Budgets</Link>
         </Button>
       </div>
     </div>
