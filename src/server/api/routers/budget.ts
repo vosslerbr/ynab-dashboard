@@ -17,6 +17,18 @@ export const budgetRouter = createTRPCRouter({
 
     return budgets;
   }),
+  getBudgetById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const budget = await ctx.db.budget.findFirst({
+        where: {
+          id: input.id,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      return budget;
+    }),
   linkBudgets: protectedProcedure
     .input(z.array(z.string()))
     .mutation(async ({ ctx, input: selectedYnabBudgetIds }) => {
