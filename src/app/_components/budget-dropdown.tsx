@@ -43,7 +43,7 @@ export function BudgetDropdown() {
         router.push(`/${value}`);
       }}
     >
-      <SelectTrigger className="bg-primary-foreground text-primary w-[180px]">
+      <SelectTrigger className="w-[200px] border-white/20 bg-white text-slate-900 hover:bg-slate-100">
         <SelectValue placeholder="Select budget">
           {currentBudget?.name ?? "Select budget"}
         </SelectValue>
