@@ -1,6 +1,7 @@
 import { H1 } from "@/components/ui/typography";
 import { getSession } from "@/server/better-auth/server";
 import Link from "next/link";
+import { BudgetDropdown } from "./budget-dropdown";
 import SignInOutButton from "./sign-in-out-btn";
 
 export default async function NavBar() {
@@ -9,7 +10,7 @@ export default async function NavBar() {
   return (
     <div className="bg-primary text-primary-foreground">
       <div className="m-auto flex max-w-7xl items-center justify-between p-4">
-        <Link href={session ? "/dashboard" : "/"}>
+        <Link href={session ? "/" : "/"}>
           <H1>YNAB Dashboard</H1>
         </Link>
         <nav>
@@ -17,10 +18,10 @@ export default async function NavBar() {
             {session && (
               <>
                 <li>
-                  <Link href="/dashboard">Dashboard</Link>
+                  <BudgetDropdown />
                 </li>
                 <li>
-                  <Link href="/dashboard/settings">Settings</Link>
+                  <Link href="/settings">Settings</Link>
                 </li>
               </>
             )}

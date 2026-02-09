@@ -53,7 +53,7 @@ export default function BudgetLinkForm({
   const mutation = api.budget.linkBudgets.useMutation({
     onSuccess: () => {
       toast.success("Budgets linked!");
-      router.push("/dashboard/settings");
+      router.push("/settings");
     },
     onError: (e) => {
       toast.error("Failed to link budgets");

@@ -16,5 +16,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   runtime: "nodejs", // Required for auth.api calls
-  matcher: ["/dashboard/:path*"], // TODO make sure this works
+  matcher: ["/:path*", "/settings/:path*", "/select-budget"],
 };
