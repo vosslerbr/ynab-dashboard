@@ -13,9 +13,14 @@ export default async function NavBar() {
         <nav>
           <ul className="flex flex-row items-center gap-8">
             {session && (
-              <li>
-                <Link href="/">Settings</Link>
-              </li>
+              <>
+                <li>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                  <Link href="/">Settings</Link>
+                </li>
+              </>
             )}
 
             <li>
