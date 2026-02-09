@@ -18,7 +18,7 @@ export default async function NavBar() {
                   <Link href="/dashboard">Dashboard</Link>
                 </li>
                 <li>
-                  <Link href="/">Settings</Link>
+                  <Link href="/dashboard/settings">Settings</Link>
                 </li>
               </>
             )}

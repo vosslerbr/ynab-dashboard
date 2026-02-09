@@ -11,8 +11,6 @@ import { H4 } from "@/components/ui/typography";
 import { api } from "@/trpc/react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import LinkBudgetButton from "./link-budget-btn";
-
 export default function BudgetSelect() {
   const { data, error, isLoading } = api.budget.getUserBudgets.useQuery();
 
@@ -27,8 +25,6 @@ export default function BudgetSelect() {
   if (data.length > 0) {
     return (
       <div className="flex flex-col gap-8">
-        <LinkBudgetButton />
-
         {data.map((budget) => (
           <Item asChild key={budget.id} variant="outline">
             <Link href={`/dashboard/${budget.id}`}>
@@ -49,10 +45,9 @@ export default function BudgetSelect() {
   return (
     <>
       <H4>
-        You have no linked budgets. To get started, link one or more of your
-        YNAB budgets.
+        You have no linked budgets. To get started, go to Settings and link one
+        or more of your YNAB budgets.
       </H4>
-      <LinkBudgetButton />
     </>
   );
 }
