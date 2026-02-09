@@ -18,14 +18,15 @@ export default async function Page({
 
   return (
     <>
-      <PageTitle title={budget.name} subtitle="Budget Overview" />
+      <PageTitle title={budget.name} subtitle="Budget Overview">
+        <Button asChild>
+          <Link href={`/${budgetId}/categories`}>Manage Categories</Link>
+        </Button>
+      </PageTitle>
       <div className="space-y-4">
         <p className="text-muted-foreground">
           This is a placeholder page for the budget details.
         </p>
-        <Button asChild>
-          <Link href={`/${budgetId}/categories`}>Manage Categories</Link>
-        </Button>
       </div>
     </>
   );
