@@ -9,7 +9,9 @@ export default async function NavBar() {
   return (
     <div className="bg-primary text-primary-foreground">
       <div className="m-auto flex max-w-7xl items-center justify-between p-4">
-        <H1>YNAB Dashboard</H1>
+        <Link href={session ? "/dashboard" : "/"}>
+          <H1>YNAB Dashboard</H1>
+        </Link>
         <nav>
           <ul className="flex flex-row items-center gap-8">
             {session && (
