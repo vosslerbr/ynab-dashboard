@@ -5,8 +5,8 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import Footer from "@/app/_components/footer";
 import NavBar from "@/app/_components/nav-bar";
-import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/sonner";
+import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
