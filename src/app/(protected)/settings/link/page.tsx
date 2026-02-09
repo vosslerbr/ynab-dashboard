@@ -1,4 +1,4 @@
-import { H1 } from "@/components/ui/typography";
+import { PageTitle } from "@/app/_components/page-title";
 import { api } from "@/trpc/server";
 import BudgetLinkForm from "./_components/form";
 
@@ -10,7 +10,10 @@ export default async function Page() {
 
   return (
     <>
-      <H1>Link Your YNAB Budgets</H1>
+      <PageTitle
+        title="Link Your YNAB Budgets"
+        subtitle="Select which budgets you want to track"
+      />
       <BudgetLinkForm
         ynabBudgets={ynabBudgets}
         existingYnabBudgetIds={existingBudgetYnabIds}

@@ -83,6 +83,7 @@ model budget {
 /// Represents a category "selected" to show in the app. Unselected categories will just be deleted
 model category {
   id        String  @id @default(cuid(2))
+  ynabId    String  // YNAB category ID
   name      String
   groupName String?
   budgeted  BigInt
@@ -96,4 +97,6 @@ model category {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([budgetId, ynabId])
 }
