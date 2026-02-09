@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CategoryGrid } from "./_components/category-grid";
 
 export default async function Page({
   params,
@@ -16,6 +17,8 @@ export default async function Page({
     notFound();
   }
 
+  const categories = await api.budget.getTrackedCategories({ budgetId });
+
   return (
     <>
       <PageTitle title={budget.name} subtitle="Budget Overview">
@@ -23,11 +26,11 @@ export default async function Page({
           <Link href={`/${budgetId}/categories`}>Manage Categories</Link>
         </Button>
       </PageTitle>
-      <div className="space-y-4">
-        <p className="text-muted-foreground">
-          This is a placeholder page for the budget details.
-        </p>
-      </div>
+      <CategoryGrid
+        categories={categories}
+        budgetId={budgetId}
+        currency={budget.currency}
+      />
     </>
   );
 }
