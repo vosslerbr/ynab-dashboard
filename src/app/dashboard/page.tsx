@@ -1,10 +1,10 @@
-import { H1 } from "@/components/ui/typography";
+import { PageTitle } from "@/app/_components/page-title";
 import BudgetSelect from "./_components/budget-select";
 
 export default function Page() {
   return (
     <>
-      <H1>Dashboard</H1>
+      <PageTitle title="Dashboard" />
       <BudgetSelect />
     </>
   );
