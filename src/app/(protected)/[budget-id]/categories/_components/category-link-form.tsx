@@ -83,6 +83,16 @@ export default function CategoryLinkForm({
     },
   });
 
+  const allCategoryIds = ynabCategories.map((cat) => cat.id);
+
+  function selectAll() {
+    form.setValue("selectedCategoryIds", allCategoryIds);
+  }
+
+  function deselectAll() {
+    form.setValue("selectedCategoryIds", []);
+  }
+
   function onSubmit() {
     setShowConfirmation(true);
   }
@@ -98,6 +108,14 @@ export default function CategoryLinkForm({
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={selectAll}>
+              Select All
+            </Button>
+            <Button type="button" variant="outline" onClick={deselectAll}>
+              Deselect All
+            </Button>
+          </div>
           {Object.entries(groupedCategories).map(([groupName, categories]) => (
             <div key={groupName} className="space-y-3">
               <H3>{groupName}</H3>
