@@ -202,6 +202,8 @@ export const budgetRouter = createTRPCRouter({
             budgeted: ynabCategory.budgeted ?? 0,
             activity: ynabCategory.activity ?? 0,
             balance: ynabCategory.balance ?? 0,
+            goal_target: ynabCategory.goal_target ?? 0,
+            goal_overall_funded: ynabCategory.goal_overall_funded ?? 0,
             budgetId: input.budgetId,
           },
           update: {
@@ -210,6 +212,8 @@ export const budgetRouter = createTRPCRouter({
             budgeted: ynabCategory.budgeted ?? 0,
             activity: ynabCategory.activity ?? 0,
             balance: ynabCategory.balance ?? 0,
+            goal_target: ynabCategory.goal_target ?? 0,
+            goal_overall_funded: ynabCategory.goal_overall_funded ?? 0,
           },
         });
       }

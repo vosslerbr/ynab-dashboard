@@ -1,20 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { category } from "generated/prisma/client";
 import Link from "next/link";
 import { CategoryDonutChart } from "./category-donut-chart";
 
-interface Category {
-  id: string;
-  name: string;
-  groupName: string | null;
-  budgeted: bigint;
-  activity: bigint;
-  balance: bigint;
-}
-
 interface CategoryGridProps {
-  categories: Category[];
+  categories: category[];
   budgetId: string;
   currency: string;
 }
@@ -42,7 +34,7 @@ export function CategoryGrid({
       (acc[group] ??= []).push(category);
       return acc;
     },
-    {} as Record<string, Category[]>,
+    {} as Record<string, category[]>,
   );
 
   return (
@@ -63,8 +55,7 @@ export function CategoryGrid({
                   </CardHeader>
                   <CardContent>
                     <CategoryDonutChart
-                      budgeted={category.budgeted}
-                      balance={category.balance}
+                      category={category}
                       currency={currency}
                     />
                   </CardContent>

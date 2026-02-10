@@ -82,13 +82,15 @@ model budget {
 
 /// Represents a category "selected" to show in the app. Unselected categories will just be deleted
 model category {
-  id        String  @id @default(cuid(2))
-  ynabId    String  // YNAB category ID
-  name      String
-  groupName String?
-  budgeted  BigInt
-  activity  BigInt
-  balance   BigInt
+  id                  String  @id @default(cuid(2))
+  ynabId              String // YNAB category ID
+  name                String
+  groupName           String?
+  budgeted            BigInt
+  activity            BigInt
+  balance             BigInt
+  goal_target         BigInt
+  goal_overall_funded BigInt
 
   // TODO: likely an enum here for selecting if the category is for charts, graphs, etc
 

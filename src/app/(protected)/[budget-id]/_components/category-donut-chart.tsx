@@ -1,11 +1,15 @@
 "use client";
 
-import { ChartContainer } from "@/components/ui/chart";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import type { category } from "generated/prisma/client";
 import { Cell, Pie, PieChart } from "recharts";
 
 interface CategoryDonutChartProps {
-  budgeted: bigint;
-  balance: bigint;
+  category: category;
   currency: string;
 }
 
@@ -19,43 +23,37 @@ function formatCurrency(amount: bigint, currency: string): string {
 }
 
 export function CategoryDonutChart({
-  budgeted,
-  balance,
+  category,
   currency,
 }: CategoryDonutChartProps) {
-  // Calculate spent amount (budgeted - balance = spent)
-  const spent = budgeted - balance;
+  const { balance, budgeted, activity } = category;
 
-  // Calculate percentages
-  const total = budgeted > 0 ? budgeted : BigInt(1); // Avoid division by zero
-  const rawSpentPercent = Number((spent * BigInt(100)) / total);
+  const spentPercent = Math.round(
+    ((Number(activity) * -1) / Number(budgeted)) * 100,
+  );
 
-  console.log(rawSpentPercent);
-
-  // Cap at 100% for display (when over budget)
-  const spentPercent = Math.min(rawSpentPercent, 100);
-  const remainingPercent = 100 - spentPercent;
+  const remaining = budgeted + activity;
+  const remainingPercent = 100 - Math.round(spentPercent);
 
   // Determine color based on spending level
-  // Green when <= 50% spent, Yellow when 50-80% spent, Red when >= 80% spent
   const getSpentColor = () => {
-    if (spentPercent <= 50) return "hsl(142, 76%, 36%)"; // Green
+    if (spentPercent < 35) return "hsl(142, 76%, 36%)"; // Green
     if (spentPercent < 80) return "hsl(48, 96%, 53%)"; // Yellow
     return "hsl(0, 84%, 60%)"; // Red
   };
 
   const data = [
-    { name: "Spent", value: spentPercent, color: getSpentColor() },
+    { name: "spent", value: Number(activity) * -1, color: "var(--muted)" },
     {
-      name: "Remaining",
-      value: remainingPercent,
-      color: "hsl(var(--muted))",
+      name: "remaining",
+      value: Number(remaining),
+      color: getSpentColor(),
     },
   ];
 
   const chartConfig = {
-    spent: { label: "Spent", color: getSpentColor() },
-    remaining: { label: "Remaining", color: "hsl(var(--muted))" },
+    spent: { label: "Spent", color: "blue" },
+    remaining: { label: "Remaining", color: "blue" },
   };
 
   return (
@@ -63,14 +61,19 @@ export function CategoryDonutChart({
       <div className="relative h-32 w-32">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
             <Pie
               data={data}
-              cx="50%"
-              cy="50%"
+              // cx="50%"
+              // cy="50%"
               innerRadius={35}
               outerRadius={50}
               paddingAngle={2}
               dataKey="value"
+              nameKey="name"
               strokeWidth={0}
             >
               {data.map((entry, index) => (
@@ -85,8 +88,10 @@ export function CategoryDonutChart({
         </div>
       </div>
       <div className="text-muted-foreground mt-2 text-center text-xs">
-        <div>{formatCurrency(balance, currency)} remaining</div>
-        <div>of {formatCurrency(budgeted, currency)}</div>
+        <div>{formatCurrency(remaining, currency)} remaining</div>
+        <div>
+          of {formatCurrency(balance > budgeted ? balance : budgeted, currency)}
+        </div>
       </div>
     </div>
   );
