@@ -52,8 +52,8 @@ export function CategoryDonutChart({
   ];
 
   const chartConfig = {
-    spent: { label: "Spent", color: "blue" },
-    remaining: { label: "Remaining", color: "blue" },
+    spent: { label: "Spent" },
+    remaining: { label: "Remaining" },
   };
 
   return (
@@ -67,11 +67,9 @@ export function CategoryDonutChart({
             />
             <Pie
               data={data}
-              // cx="50%"
-              // cy="50%"
               innerRadius={35}
               outerRadius={50}
-              paddingAngle={2}
+              paddingAngle={0}
               dataKey="value"
               nameKey="name"
               strokeWidth={0}
@@ -83,7 +81,7 @@ export function CategoryDonutChart({
           </PieChart>
         </ChartContainer>
         {/* Center text showing percentage remaining */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-sm font-semibold">{remainingPercent}%</span>
         </div>
       </div>
